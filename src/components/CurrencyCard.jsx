@@ -17,13 +17,21 @@ const CurrencyCard = () => {
 
 
   useEffect(() => {
-    axios.get(Currency_API).then((res) => setCurrency(res.data.rates))
-      .catch((err) => {
-        console.log(err)
-        setCurrency(null)
+    axios.get(Currency_API)
+      .then((res) => {
+        const rates = res.data.rates;
+        if (rates) {
+          setCurrency(rates);
+        } else {
+          console.error("Error fetching currency rates:", res.data);
+        }
       })
-
+      .catch((err) => {
+        console.error("Error fetching currency rates:", err);
+        setCurrency(null);
+      });
   }, []);
+  
   const handleAmountOneChange = (amountOne) => {
     setShowResult(false)
     setAmountTwo(amountOne * currency[currencyTwo] / currency[currencyOne]);
