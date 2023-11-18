@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
+import { FaArrowsRotate } from "react-icons/fa6";
+
 import CurrencyInput from "./CurrencyInput";
 import axios from "axios";
 const API_KEY = "c9feff0670ffbec5069f1f44d836ad31";
@@ -12,10 +14,7 @@ const CurrencyCard = () => {
   const [amountTwo, setAmountTwo] = useState(1);
   const [currencyOne, setCurrencyOne] = useState("USD");
   const [currencyTwo, setCurrencyTwo] = useState("EUR");
-  const [showResult, setShowResult] = useState(false)
-
-
-
+  const [showResult, setShowResult] = useState(false);
   useEffect(() => {
     axios.get(Currency_API)
       .then((res) => {
@@ -49,6 +48,17 @@ const CurrencyCard = () => {
     setAmountOne(amountTwo * currency[currencyOne] / currency[currencyTwo]);
     setCurrencyTwo(currencyTwo);
   }
+  const handleRotateButtOnClick = () => {
+    const newCurrencyOne = currencyTwo;
+    const newCurrencyTwo = currencyOne;
+  
+    setCurrencyOne(newCurrencyOne);
+    setCurrencyTwo(newCurrencyTwo);
+  
+    const newAmountTwo = amountOne * currency[newCurrencyTwo] / currency[newCurrencyOne];
+    setAmountTwo(newAmountTwo);
+    setShowResult(false); 
+  };
   return (
     <div className="d-flex flex-column gap-4">
       <div className="card w-25 mx-auto rounded-3 position-relative overflow-hidden" style={{ backgroundColor: "#EABF3C" }}>
@@ -74,6 +84,7 @@ const CurrencyCard = () => {
                 onCurrencyChange={handleCurrencyOneChange}
               />
             </div>
+            <FaArrowsRotate className="fs-2 text-light mt-4" onClick={handleRotateButtOnClick}/> 
             <div className="d-flex flex-column w-50">
               <label htmlFor="" className="text-light">to</label>
               <CurrencyInput
